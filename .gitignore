@@ -1,0 +1,18 @@
+# Root-level node_modules
+/node_modules
+
+# Frontend and backend
+/frontend/node_modules
+/server/node_modules
+
+# Environment and build
+**/.env
+*.log
+/frontend/build
+/build
+/dist
+
+# OS + Misc
+.DS_Store
+# Ignore .env in the server folder
+/server/.env
