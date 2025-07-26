@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/lost-and-found-app/static/css/main.8bfbf339.css",
+    "main.js": "/lost-and-found-app/static/js/main.45a95191.js",
+    "static/js/453.d855a71b.chunk.js": "/lost-and-found-app/static/js/453.d855a71b.chunk.js",
+    "index.html": "/lost-and-found-app/index.html",
+    "main.8bfbf339.css.map": "/lost-and-found-app/static/css/main.8bfbf339.css.map",
+    "main.45a95191.js.map": "/lost-and-found-app/static/js/main.45a95191.js.map",
+    "453.d855a71b.chunk.js.map": "/lost-and-found-app/static/js/453.d855a71b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8bfbf339.css",
+    "static/js/main.45a95191.js"
+  ]
+}
