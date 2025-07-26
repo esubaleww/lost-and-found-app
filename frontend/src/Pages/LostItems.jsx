@@ -23,7 +23,7 @@ const LostItems = () => {
   );
 
   return (
-    <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
+    <div className="p-6 md:p-10 bg-gray-300 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
           <h1 className="text-4xl font-bold text-red-600 mb-2">
@@ -80,23 +80,21 @@ const LostItems = () => {
                 key={item.id}
                 className="bg-white rounded-2xl border shadow p-4 flex flex-col"
               >
+                <a href={`http://localhost:5000/uploads/${item.image_url}`}>
                 <img
                   src={`http://localhost:5000/uploads/${item.image_url}`}
                   alt={item.name}
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 />
-                <a
-                  href={`http://localhost:5000/uploads/${item.image_url}`}
-                  download
-                  className="text-blue-500 hover:underline"
-                >
-                  See Full Image
                 </a>
                 <h3 className="text-xl font-semibold text-red-600">
                   {item.name}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
                   📍 Last seen: {item.location}
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  📍 Lost By: {item.lost_by}
                 </p>
                 <p className="text-sm text-gray-600 mt-1">
                   📅 Lost on: {new Date(item.date_lost).toLocaleDateString()}

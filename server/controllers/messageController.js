@@ -39,8 +39,6 @@ exports.sendMessage = async (req, res) => {
     const io = req.app.get("io");
     io.to(claim_id).emit("receive_message", fullMessage);
 
-    console.log(fullMessage);
-
     res.status(201).json(fullMessage);
   } catch (error) {
     console.error("Send message error:", error);

@@ -37,7 +37,7 @@ const FoundItems = () => {
   );
 
   return (
-    <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
+    <div className="p-6 md:p-10 bg-gray-300 min-h-screen">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -91,13 +91,14 @@ const FoundItems = () => {
           ) : (
             filteredItems.map(item => (
               <div key={item.id} className="bg-white rounded-2xl border shadow p-4 flex flex-col">
-                <img
+                <a href= {`http://localhost:5000/uploads/${item.image_url}`}><img
                   src={`http://localhost:5000/uploads/${item.image_url}`}
                   alt={item.name}
                   className="w-full h-48 object-cover rounded-xl mb-4"
-                />
+                /></a>
                 <h3 className="text-xl font-semibold text-green-700">{item.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">📍 {item.location}</p>
+                <p className="text-sm text-gray-600 mt-1">👴Found By: {item.found_by}</p>
                 <p className="text-sm text-gray-600 mt-1">📅 Found on: {new Date(item.date_found).toLocaleDateString()}</p>
                 <p className="text-sm text-gray-700 mt-2">{item.description}</p>
 

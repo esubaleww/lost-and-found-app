@@ -103,11 +103,12 @@ const Profile = () => {
       {/* Profile Picture */}
       <div className="flex justify-center mb-6">
         {profile.profile_picture ? (
+          <a href= {profile.profile_picture}>
           <img
-            src={profile.profile_picture} // Correct image path
+            src={profile.profile_picture} 
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover"
-          />
+          /></a>
         ) : (
           <div className="w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
             <UserCircle size={64} />

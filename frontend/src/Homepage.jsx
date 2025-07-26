@@ -1,56 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from './Pages/AuthContext';
-import { Menu, X, FilePlus, FileText, Shield, UserCircle, LogIn, UserPlus, Bell } from 'lucide-react';
+import {
+  Menu, X, FilePlus, FileText, Shield, UserCircle, LogIn, UserPlus, Bell
+} from 'lucide-react';
 import './index.css';
 
 const Homepage = () => {
   const [foundItems, setFoundItems] = useState([]);
   const [lostItems, setLostItems] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const { user, token } = useAuth(); 
+  const { user, token } = useAuth();
   const [foundSearchTerm, setFoundSearchTerm] = useState("");
   const [lostSearchTerm, setLostSearchTerm] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-             
-    // Load latest found items
     fetch('http://localhost:5000/api/items/found_items/latest')
       .then(res => res.json())
       .then(data => setFoundItems(data))
       .catch(err => console.error('Failed to load found items:', err));
-  
-    // Load latest lost items
+
     fetch('http://localhost:5000/api/items/lost_items/latest')
       .then(res => res.json())
       .then(data => setLostItems(data))
       .catch(err => console.error('Failed to load lost items:', err));
 
-      if (user && token) {
+    if (user && token) {
       fetch("http://localhost:5000/api/getProfile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => res.json())
         .then(data => setProfileImage(data.profile_picture))
-        .catch(err => console.error('Failed to fetch unread count:', err));
-    }   
-  
-    // Fetch unread notifications count (corrected route)
-    if (user && token) {
+        .catch(err => console.error('Failed to fetch profile image:', err));
+
       fetch('http://localhost:5000/api/notifications/count', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => res.json())
         .then(data => setUnreadCount(data.count))
         .catch(err => console.error('Failed to fetch unread count:', err));
     }
-  }, [user, token]); 
+  }, [user, token]);
 
   const filteredFoundItems = foundItems.filter(item =>
     item.name.toLowerCase().includes(foundSearchTerm.toLowerCase()) ||
@@ -61,12 +53,11 @@ const Homepage = () => {
     item.name.toLowerCase().includes(lostSearchTerm.toLowerCase()) ||
     item.location.toLowerCase().includes(lostSearchTerm.toLowerCase())
   );
-  
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 font-sans">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-400 via-white to-green-300 font-sans">
       {/* Header */}
-      <header className="flex flex-row  bg-blue-700 text-white p-4 justify-between items-center shadow-md">
+      <header className="flex flex-row bg-slate-700 text-white p-4 justify-between items-center shadow-md relative">
         <div className="text-2xl font-bold tracking-wide flex items-center gap-2">
           <img
             src="http://localhost:5000/uploads/logo.jpg"
@@ -75,6 +66,7 @@ const Homepage = () => {
           />
           Lost & Found Portal
         </div>
+
         {/* Mobile menu toggle */}
         <button
           className="md:hidden mr-4"
@@ -83,74 +75,99 @@ const Homepage = () => {
           {isSidebarOpen ? <X className="w-7 h-7 text-white" /> : <Menu className="w-7 h-7 text-white" />}
         </button>
 
+        {/* Desktop Nav */}
         <nav className="space-x-4 hidden md:flex items-center">
-
           <Link to="/" className="hover:underline transition-colors duration-300">Home</Link>
           <Link to="/lost-items" className="hover:underline transition-colors duration-300">Lost Items</Link>
           <Link to="/found-items" className="hover:underline transition-colors duration-300">Found Items</Link>
-        <div className="relative group inline-block">
-          <Link to="/profile">
-           {profileImage ? (
-          <img
-            src={profileImage}
-            alt="Profile"
-            className="w-12 h-12 rounded-full border object-cover"
-            onError={(e) => { e.target.style.display = 'none'; }}
-           />
-         ) : user.image ?(
-          <img
-            src={`http://localhost:5000/uploads/${user.image}?${Date.now()}`}
-            alt="Profile"
-            className="w-12 h-12 rounded-full border object-cover"
-            onError={(e) => { e.target.style.display = 'none'; }}
-           />
-         )  : (
-           <UserCircle className="w-10 h-10 text-white" />
-          )}
-         </Link>
-         <span className="absolute top-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition">
-         View Profile
-         </span>
-       </div>
 
-          <Link to="/login">
-            <button className="flex items-center gap-1 bg-white text-blue-700 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300 shadow">
-              <LogIn className="w-4 h-4" /> Login
-            </button>
-          </Link>
-          <Link to="/register">
-            <button className="ml-2 flex items-center gap-1 bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-500 transition-colors duration-300 shadow">
-              <UserPlus className="w-4 h-4" /> Register
-            </button>
-          </Link>
+          <div className="relative group inline-block">
+            <Link to="/profile">
+              {profileImage ? (
+                <img src={profileImage} alt="Profile" className="w-12 h-12 rounded-full border object-cover" />
+              ) : user?.image ? (
+                <img src={`http://localhost:5000/uploads/${user.image}?${Date.now()}`} alt="Profile" className="w-12 h-12 rounded-full border object-cover" />
+              ) : (
+                <UserCircle className="w-10 h-10 text-white" />
+              )}
+            </Link>
+            <span className="absolute top-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition">
+              View Profile
+            </span>
+          </div>
 
-          {/* Notification Bell with unread count */}
-          <Link to="/notifications">
-            {user && (
-              <div className="relative group">
-                <Bell
-                  className="w-7 h-7 text-white cursor-pointer"
-                />
-                <span className="absolute top-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 text-sm text-white bg-black rounded opacity-0 group-hover:opacity-100 transition">
-                  Notifications
-               </span>
-                {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 w-3 h-3 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
-                    {unreadCount}
+          {user ? (
+            <>
+              <Link to="/notifications">
+                <div className="relative group">
+                  <Bell className="w-7 h-7 text-white cursor-pointer" />
+                  <span className="absolute top-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 text-sm text-white bg-black rounded opacity-0 group-hover:opacity-100 transition">
+                    Notifications
                   </span>
-                )}
-              </div>
-            )}
-          </Link>
-          <Link to="/logout" className="hover:underline transition-colors duration-300">log out</Link>
+                  {unreadCount > 0 && (
+                    <span className="absolute top-0 right-0 w-3 h-3 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
+                </div>
+              </Link>
+              <Link to="/logout" className="hover:underline transition-colors duration-300">Logout</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <button className="flex items-center gap-1 bg-white text-blue-700 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300 shadow">
+                  <LogIn className="w-4 h-4" /> Login
+                </button>
+              </Link>
+              <Link to="/register">
+                <button className="ml-2 flex items-center gap-1 bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-500 transition-colors duration-300 shadow">
+                  <UserPlus className="w-4 h-4" /> Register
+                </button>
+              </Link>
+            </>
+          )}
         </nav>
+
+        {/* ✅ Mobile dropdown nav */}
+        {isSidebarOpen && (
+          <div className="md:hidden bg-white text-blue-800 shadow-md absolute top-[70px] right-0 w-64 z-50 rounded-bl-lg overflow-hidden border border-blue-200">
+            <ul className="flex flex-col divide-y divide-blue-100">
+              <li><Link to="/" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Home</Link></li>
+              <li><Link to="/lost-items" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Lost Items</Link></li>
+              <li><Link to="/found-items" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Found Items</Link></li>
+              {user && (
+                <>
+                  <li><Link to="/profile" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Profile</Link></li>
+                  <li>
+                    <Link to="/notifications" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">
+                      Notifications
+                      {unreadCount > 0 && (
+                        <span className="ml-2 inline-block bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                  <li><Link to="/logout" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Logout</Link></li>
+                </>
+              )}
+              {!user && (
+                <>
+                  <li><Link to="/login" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Login</Link></li>
+                  <li><Link to="/register" onClick={() => setIsSidebarOpen(false)} className="block px-4 py-3 hover:bg-blue-100">Register</Link></li>
+                </>
+              )}
+            </ul>
+          </div>
+        )}
       </header>
 
       {/* Body */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar (Mobile & Desktop) */}
           <aside
-            className={`fixed top-[70px] left-0 w-64 h-full bg-white p-6 z-50 transition-transform duration-300 md:static md:translate-x-0 border-r
+            className={`fixed top-[70px] left-0 w-64 h-full bg-white p-6 z-40 transition-transform duration-300 md:static md:translate-x-0 border-r
             ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:block`}
           >
             <h2 className="text-xl font-semibold mb-6">Quick Links</h2>
@@ -185,7 +202,7 @@ const Homepage = () => {
             Welcome to BDU Lost & Found Portal
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <section className="group transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col p-6 bg-white border border-blue-200 rounded-2xl shadow-md h-[500px]">
+        <section className="group transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col p-6 bg-blue-50 border border-blue-200 rounded-2xl shadow-md h-[500px]">
            <h2 className="text-2xl font-semibold mb-2 text-blue-700 group-hover:text-blue-800 transition-colors">
             Latest Lost Items
            </h2>
@@ -220,16 +237,16 @@ const Homepage = () => {
     ) : (
       filteredLostItems.map(item => (
         <div key={item.id} className="border-b pb-4 flex gap-4">
-          <img
+          <a href= {`http://localhost:5000/uploads/${item.image_url}`}><img
             src={`http://localhost:5000/uploads/${item.image_url}`}
             alt={item.name}
             className="w-30 h-28 object-cover rounded-xl border shadow-sm"
-          />
+          /></a>
           <div className="flex flex-col justify-between">
-            <p className="font-semibold text-lg text-gray-800">{item.name}</p>
+            <p className="font-semibold text-lg text-gray-900">{item.name}</p>
             <p className="text-sm text-gray-600">Location: {item.location}</p>
             <p className="text-sm text-gray-600">Lost by: {item.lost_by}</p>
-            <p className="text-sm text-gray-600">Description: {item.description}</p>
+            <p className="text-sm text-gray-700">Description: {item.description}</p>
             <p className="text-sm text-gray-500">
               Lost on: {new Date(item.date_lost).toLocaleDateString()}
             </p>
@@ -241,13 +258,13 @@ const Homepage = () => {
         
   {/* View All Button */}
   <Link to="/lost-items" className="mt-4">
-    <button className="w-full px-4 py-2 rounded bg-gradient-to-r from-blue-600 to-blue-800 text-white font-medium shadow hover:scale-105 transform transition duration-300">
+    <button className="w-full px-4 py-2 rounded bg-gradient-to-r from-blue-500 to-blue-800 text-white font-medium shadow hover:scale-105 transform transition duration-300">
       View All Lost Items
     </button>
   </Link>
 </section>
 
-<section className="group transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col p-6 bg-white border border-green-200 rounded-2xl shadow-md h-[500px]">
+<section className="group transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col p-6 bg-green-50 border border-green-200 rounded-2xl shadow-md h-[500px]">
   <h2 className="text-2xl font-semibold mb-4 text-green-700 group-hover:text-green-800 transition-colors">Latest Found Items</h2>
   <p className="text-gray-600 mb-4">Browse recently reported found items on campus.</p>
 
@@ -278,15 +295,17 @@ const Homepage = () => {
       <p className="text-sm text-gray-500">No found items match your search.</p>
     ) : (
       filteredFoundItems.map(item => (
-        <div key={item.id} className="border-b pb-4 flex gap-4">
-          <img
+        <div key={item.id} className="border-b pb-4 flex gap-3">
+          <a href= {`http://localhost:5000/uploads/${item.image_url}`}><img
             src={`http://localhost:5000/uploads/${item.image_url}`}
             alt={item.name}
             className="w-30 h-28 object-cover rounded-xl border shadow-sm"
-            />
+            /></a>
             <div className="flex flex-col justify-between">
-              <p className="font-semibold text-lg text-gray-800">{item.name}</p>
+              <p className="font-semibold text-lg text-gray-900">{item.name}</p>
               <p className="text-sm text-gray-600">Location: {item.location}</p>
+              <p className="text-sm text-gray-600">Found by: {item.found_by}</p>
+              <p className="text-sm text-gray-700">Description: {item.description}</p>
               <p className="text-sm text-gray-500">
                 Found on: {new Date(item.date_found).toLocaleDateString()}
               </p>
@@ -308,7 +327,7 @@ const Homepage = () => {
       {/* Footer */}
       <footer className="bg-blue-900 text-white py-2 mt-auto shadow-inner">
             <div className="max-w-5xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-              <div>&copy; {new Date().getFullYear()} Esubalew Worku. All rights reserved.</div>
+              <div>&copy; {new Date().getFullYear()} Lost&Found. All rights reserved.</div>
                <div className="space-x-4">
                 <a href="mailto:esuwo2024@gmail.com" className="hover:underline">esuwo2024@gmail.com</a>
                 <span>|</span>

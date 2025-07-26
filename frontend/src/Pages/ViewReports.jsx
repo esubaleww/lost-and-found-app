@@ -98,17 +98,12 @@ const ViewReports = () => {
                   key={item.id}
                   className="bg-white rounded-2xl border shadow p-4 flex flex-col"
                 >
+                  <a href={`http://localhost:5000/uploads/${item.image_url}`}>
                   <img
                     src={`http://localhost:5000/uploads/${item.image_url}`}
                     alt={item.name}
                     className="w-full h-48 object-cover rounded-xl mb-4"
                   />
-                  <a
-                    href={`http://localhost:5000/uploads/${item.image_url}`}
-                    download
-                    className="text-blue-500 hover:underline"
-                  >
-                    See Full Image
                   </a>
                   <h3 className="text-xl font-semibold text-red-600">
                     {item.name}
@@ -142,11 +137,13 @@ const ViewReports = () => {
                   key={item.id}
                   className="bg-white rounded-2xl border shadow p-4 flex flex-col"
                 >
+                  <a href={`http://localhost:5000/uploads/${item.image_url}`}>
                   <img
                     src={`http://localhost:5000/uploads/${item.image_url}`}
                     alt={item.name}
                     className="w-full h-48 object-cover rounded-xl mb-4"
                   />
+                  </a>
                   <h3 className="text-xl font-semibold text-green-700">
                     {item.name}
                   </h3>

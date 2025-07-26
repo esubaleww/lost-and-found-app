@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../Pages/AuthContext';
-import io from 'socket.io-client';
 import { Send, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import Picker from 'emoji-picker-react';
-
-const socket = io('http://localhost:5000');
+import socket from '../components/socket';
+import ScrollToBottom from "react-scroll-to-bottom";
 
 const ChatPage = ({ receiverId, claimId }) => {
   const { user, token } = useAuth();
@@ -21,6 +20,15 @@ const ChatPage = ({ receiverId, claimId }) => {
   const messagesEndRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const [tick, setTick] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setTick((prev) => prev + 1);
+  }, 30000); 
+  return () => clearInterval(interval);
+}, []);
+
 
   useEffect(() => {
     if (!token || !claimId) return;
@@ -39,19 +47,25 @@ const ChatPage = ({ receiverId, claimId }) => {
     };
 
     fetchMessages();
+    const handleConnect = () => {
+    console.log("🔁 Socket reconnected");
+    socket.emit("user_connected", user.id); 
+  };
+     if (!socket.connected) socket.connect();
     socket.emit('join_room', claimId, user.id);
 
-    socket.on('user_status_change', ({ userId, status }) => {
-      if (userId === receiverId) {
-        setReceiverOnline(status === 'online');
-      }
-    });
+    socket.on("connect", handleConnect);
+
+     const handleStatusChange = ({ userId, status }) => {
+    if (userId === receiverId) {
+      setReceiverOnline(status === "online");
+    }
+  };
+
+    socket.on('user_status_change', handleStatusChange);
 
     socket.on('receive_message', (message) => {
-      if (message.claim_id !== claimId) return;
-      console.log('Received via socket:', message);
-
-
+      if (message.claim_id !== Number(claimId)) return;
       setMessages(prev => {
         const exists = prev.some(m => m.tempId === message.tempId);
         if (exists) {
@@ -89,22 +103,24 @@ const ChatPage = ({ receiverId, claimId }) => {
       socket.off('message_delivered');
       socket.off('typing');
       socket.off('user_status_change');
+       socket.off("connect", handleConnect);
     };
   }, [claimId, token, receiverId, user.id]);
 
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    const nearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
-    if (nearBottom) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
+  messagesEndRef.current?.scrollIntoView({ behavior: 'auto' }); // or 'smooth' if you prefer
+}, [messages]);
 
-  const handleTyping = (e) => {
-    setContent(e.target.value);
+
+ let typingTimeout;
+const handleTyping = (e) => {
+  setContent(e.target.value);
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
     socket.emit('typing', claimId);
-  };
+  }, 500); // emit only after 500ms pause
+};
+
 
   const sendMessage = async () => {
   if (!content.trim()) return;
@@ -134,6 +150,7 @@ const ChatPage = ({ receiverId, claimId }) => {
     });
 
     const data = await res.json();
+    console.log("sent", data);
 
     if (!res.ok) throw new Error(data.error || 'Failed to send message');
 
@@ -177,9 +194,26 @@ const ChatPage = ({ receiverId, claimId }) => {
     setShowEmoji(false);
   };
 
+function formatTime(timestamp) {
+  if (!timestamp) return 'Invalid time';
+
+  const time = new Date(timestamp);
+  if (isNaN(time)) return 'Invalid time';
+
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - time) / 1000);
+
+  if (diffInSeconds < 60) {
+    return 'just now';
+  }
+
+  return formatDistanceToNow(time, { addSuffix: true });
+}
+
+
   return (
     <div className="w-full h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-3xl h-[80vh] bg-white shadow-xl rounded-xl border flex flex-col p-4">
+       <div className="w-full max-w-3xl h-[80vh] bg-white shadow-xl rounded-xl border flex flex-col p-4">
         <div
           ref={scrollContainerRef}
           className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar"
@@ -191,12 +225,14 @@ const ChatPage = ({ receiverId, claimId }) => {
                 key={msg.tempId || msg.id}
                 className={`flex items-end ${isSender ? 'justify-end' : 'justify-start'} gap-2`}
               >
+
                 <div className="relative">
                   <img
                     src={`http://localhost:5000/uploads/${msg.profile_picture || 'default.jpg'}`}
                     alt="Profile"
                     className="w-9 h-9 rounded-full object-cover border shadow"
                   />
+                  <small className='relative top-0'>{receiverOnline ? '🟢' : '⚪'}</small>
                 </div>
                 <div className="relative max-w-[70%] group">
                   <div
@@ -207,9 +243,7 @@ const ChatPage = ({ receiverId, claimId }) => {
                   >
                     <div>{msg.content}</div>
                     <div className="text-xs mt-1 opacity-60">
-                      {msg.created_at
-                        ? formatDistanceToNow(new Date(msg.created_at), { addSuffix: true })
-                        : 'just now'}
+                      <span>{formatTime(msg.timestamp)}</span>
                     </div>
                   </div>
 
