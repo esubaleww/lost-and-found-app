@@ -4,7 +4,6 @@ import { Send, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import Picker from 'emoji-picker-react';
 import socket from '../components/socket';
-import ScrollToBottom from "react-scroll-to-bottom";
 
 const ChatPage = ({ receiverId, claimId }) => {
   const { user, token } = useAuth();
@@ -212,7 +211,7 @@ function formatTime(timestamp) {
 
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+    <div className="w-full h-screen flex items-center justify-center bg-gray-500">
        <div className="w-full max-w-3xl h-[80vh] bg-white shadow-xl rounded-xl border flex flex-col p-4">
         <div
           ref={scrollContainerRef}

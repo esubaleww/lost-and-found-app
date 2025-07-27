@@ -80,10 +80,10 @@ const Notifications = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-6 bg-slate-400">
       <ToastContainer position="top-right" autoClose={5000} />
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold text-white">
           Notifications ({unreadCount} unread)
         </h2>
         <label className="flex items-center space-x-2">
