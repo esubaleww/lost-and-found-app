@@ -31,7 +31,7 @@ const ReportFoundItem = () => {
     form.append('user_id', user?.id); // ✅ Add logged-in user ID
 
     try {
-      const res = await fetch('http://localhost:5000/api/items/found_items', {
+      const res = await fetch('https://server-production-82bb.up.railway.app/api/items/found_items', {
         method: 'POST',
         body: form,
       });

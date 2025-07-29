@@ -11,7 +11,7 @@ const ClaimsPage = () => {
 
   const fetchClaims = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/claims/${itemId}`, {
+      const res = await fetch(`https://server-production-82bb.up.railway.app/api/claims/${itemId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +38,7 @@ const ClaimsPage = () => {
 
   const handleDecision = async (claimId, decision) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/claims/${claimId}`, {
+      const res = await fetch(`https://server-production-82bb.up.railway.app/api/claims/${claimId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

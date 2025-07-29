@@ -11,7 +11,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     const loadingToast = toast.loading('Sending OTP...');
     try {
-      const res = await fetch('http://localhost:5000/api/password/forgot-password', {
+      const res = await fetch('https://server-production-82bb.up.railway.app/api/password/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

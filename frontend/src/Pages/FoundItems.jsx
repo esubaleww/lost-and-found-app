@@ -11,7 +11,7 @@ const FoundItems = () => {
   const [activeClaimItemId, setActiveClaimItemId] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/items/found_items/all')
+    fetch('https://server-production-82bb.up.railway.app/api/items/found_items/all')
       .then(res => res.json())
       .then(data => setFoundItems(data))
       .catch(err => console.error('Error fetching found items:', err));
@@ -19,7 +19,7 @@ const FoundItems = () => {
 
   const handleChatAccess = async (itemId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/claims/accepted?userId=${user.id}&itemId=${itemId}`);
+      const res = await fetch(`https://server-production-82bb.up.railway.app/api/claims/accepted?userId=${user.id}&itemId=${itemId}`);
       const data = await res.json();
       if (data.hasAccess) {
         navigate(`/chat/${data.claimId}`);
@@ -91,8 +91,8 @@ const FoundItems = () => {
           ) : (
             filteredItems.map(item => (
               <div key={item.id} className="bg-white rounded-2xl border shadow p-4 flex flex-col">
-                <a href= {`http://localhost:5000/uploads/${item.image_url}`}><img
-                  src={`http://localhost:5000/uploads/${item.image_url}`}
+                <a href= {`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}><img
+                  src={`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}
                   alt={item.name}
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 /></a>

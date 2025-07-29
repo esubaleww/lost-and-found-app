@@ -32,7 +32,7 @@ const ReportLostItem = () => {
     });
     body.append('user_id', user?.id); // attach user_id to backend
 
-    const res = await fetch('http://localhost:5000/api/items/lost_items', {
+    const res = await fetch('https://server-production-82bb.up.railway.app/api/items/lost_items', {
       method: 'POST',
       body,
     });
@@ -55,9 +55,10 @@ const ReportLostItem = () => {
   };
   console.log('Authenticated user:', user);
   return (
+    <div className='bg-gradient-to-r from-violet-300 to-gray-200 min-h-screen'>
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-lg space-y-6 border mt-6"
+      className="max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-lg space-y-6 border"
     >
       <h2 className="text-3xl font-bold text-blue-700 text-center mb-4">📣 Report Lost Item</h2>
 
@@ -81,6 +82,7 @@ const ReportLostItem = () => {
         Submit Lost Report
       </button>
     </form>
+    </div>
   );
 };
 

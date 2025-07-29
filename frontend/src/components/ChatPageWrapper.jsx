@@ -12,7 +12,7 @@ const ChatPageWrapper = () => {
   useEffect(() => {
     const fetchChatInfo = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/messages/claim/${claimId}`, {
+        const res = await fetch(`https://server-production-82bb.up.railway.app/api/messages/claim/${claimId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

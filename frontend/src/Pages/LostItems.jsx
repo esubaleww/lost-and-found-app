@@ -10,7 +10,7 @@ const LostItems = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/items/lost_items/all")
+    fetch("https://server-production-82bb.up.railway.app/api/items/lost_items/all")
       .then((res) => res.json())
       .then((data) => setLostItems(data))
       .catch((err) => console.error("Error fetching lost items:", err));
@@ -80,9 +80,9 @@ const LostItems = () => {
                 key={item.id}
                 className="bg-white rounded-2xl border shadow p-4 flex flex-col"
               >
-                <a href={`http://localhost:5000/uploads/${item.image_url}`}>
+                <a href={`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}>
                 <img
-                  src={`http://localhost:5000/uploads/${item.image_url}`}
+                  src={`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}
                   alt={item.name}
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 />

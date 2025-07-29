@@ -17,25 +17,25 @@ const Homepage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/items/found_items/latest')
+    fetch('https://server-production-82bb.up.railway.app/api/items/found_items/latest')
       .then(res => res.json())
       .then(data => setFoundItems(data))
       .catch(err => console.error('Failed to load found items:', err));
 
-    fetch('http://localhost:5000/api/items/lost_items/latest')
+    fetch('https://server-production-82bb.up.railway.app/api/items/lost_items/latest')
       .then(res => res.json())
       .then(data => setLostItems(data))
       .catch(err => console.error('Failed to load lost items:', err));
 
     if (user && token) {
-      fetch("http://localhost:5000/api/getProfile", {
+      fetch("https://server-production-82bb.up.railway.app/api/getProfile", {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => res.json())
         .then(data => setProfileImage(data.profile_picture))
         .catch(err => console.error('Failed to fetch profile image:', err));
 
-      fetch('http://localhost:5000/api/notifications/count', {
+      fetch('https://server-production-82bb.up.railway.app/api/notifications/count', {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => res.json())
@@ -60,7 +60,7 @@ const Homepage = () => {
       <header className="flex flex-row bg-slate-700 text-white p-4 justify-between items-center shadow-md relative">
         <div className="text-2xl font-bold tracking-wide flex items-center gap-2">
           <img
-            src="http://localhost:5000/uploads/logo.jpg"
+            src="https://server-production-82bb.up.railway.app/uploads/logo.jpg"
             alt="Logo"
             className="w-12 h-12 rounded-full border object-cover"
           />
@@ -86,7 +86,7 @@ const Homepage = () => {
               {profileImage ? (
                 <img src={profileImage} alt="Profile" className="w-12 h-12 rounded-full border object-cover" />
               ) : user?.image ? (
-                <img src={`http://localhost:5000/uploads/${user.image}?${Date.now()}`} alt="Profile" className="w-12 h-12 rounded-full border object-cover" />
+                <img src={`https://server-production-82bb.up.railway.app/${user.image}?${Date.now()}`} alt="Profile" className="w-12 h-12 rounded-full border object-cover" />
               ) : (
                 <UserCircle className="w-10 h-10 text-white" />
               )}
@@ -237,8 +237,8 @@ const Homepage = () => {
     ) : (
       filteredLostItems.map(item => (
         <div key={item.id} className="border-b pb-4 flex gap-4">
-          <a href= {`http://localhost:5000/uploads/${item.image_url}`}><img
-            src={`http://localhost:5000/uploads/${item.image_url}`}
+          <a href= {`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}><img
+            src={`https://server-production-82bb.up.railway.app/${item.image_url}`}
             alt={item.name}
             className="w-30 h-28 object-cover rounded-xl border shadow-sm"
           /></a>
@@ -296,8 +296,8 @@ const Homepage = () => {
     ) : (
       filteredFoundItems.map(item => (
         <div key={item.id} className="border-b pb-4 flex gap-3">
-          <a href= {`http://localhost:5000/uploads/${item.image_url}`}><img
-            src={`http://localhost:5000/uploads/${item.image_url}`}
+          <a href= {`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}><img
+            src={`https://server-production-82bb.up.railway.app/uploads/${item.image_url}`}
             alt={item.name}
             className="w-30 h-28 object-cover rounded-xl border shadow-sm"
             /></a>

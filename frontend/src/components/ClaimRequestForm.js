@@ -11,7 +11,9 @@ const ClaimRequestForm = ({ itemId, requesterId }) => {
   useEffect(() => {
     const checkExistingClaim = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/claims/${itemId}`);
+        const res = await fetch(
+          `https://server-production-82bb.up.railway.app/api/claims/${itemId}`
+        );
         const data = await res.json();
 
         if (Array.isArray(data)) {
@@ -42,15 +44,18 @@ const ClaimRequestForm = ({ itemId, requesterId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/claims", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          item_id: itemId,
-          requester_id: requesterId,
-          message,
-        }),
-      });
+      const res = await fetch(
+        "https://server-production-82bb.up.railway.app/api/claims",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            item_id: itemId,
+            requester_id: requesterId,
+            message,
+          }),
+        }
+      );
 
       const data = await res.json();
       if (data.success) {

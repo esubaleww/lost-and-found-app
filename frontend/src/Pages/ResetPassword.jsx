@@ -13,7 +13,7 @@ const ResetPassword = () => {
     e.preventDefault();
     const loadingToast = toast.loading('Resetting password...');
     try {
-      const res = await fetch('http://localhost:5000/api/password/reset-password', {
+      const res = await fetch('https://server-production-82bb.up.railway.app/api/password/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, newPassword }),

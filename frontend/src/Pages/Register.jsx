@@ -64,7 +64,7 @@ const Register = () => {
     setIsSendingOtp(true);
     setMessage('');
     try {
-      const res = await fetch('http://localhost:5000/api/users/send-otp', {
+      const res = await fetch('https://server-production-82bb.up.railway.app/api/users/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -104,7 +104,7 @@ const Register = () => {
       formData.append('phone', phone);
       formData.append('profilePicture', profilePicture);
 
-      const res = await fetch('http://localhost:5000/api/users/register', {
+      const res = await fetch('https://server-production-82bb.up.railway.app/api/users/register', {
         method: 'POST',
         body: formData,
       });

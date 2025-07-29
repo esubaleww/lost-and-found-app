@@ -18,7 +18,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/getProfile", {
+        const res = await fetch("https://server-production-82bb.up.railway.app/api/getProfile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -60,7 +60,7 @@ const Profile = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/updateProfile", {
+      const res = await fetch("https://server-production-82bb.up.railway.app/api/updateProfile", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`, // Include auth token
@@ -90,8 +90,9 @@ const Profile = () => {
   if (!profile)
     return <p className="text-center text-red-500">Failed to load profile.</p>;
   return (
+    <div className="bg-gradient-to-r from-blue-200 to-gray-100  min-h-screen">
     <motion.div
-      className="max-w-lg mx-auto bg-gradient-to-r from-blue-100 to-blue-200 p-8 rounded-xl shadow-lg"
+      className="max-w-lg mx-auto bg-gradient-to-r from-gray-100 to-blue-200 p-8 rounded-xl shadow-lg"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -198,6 +199,7 @@ const Profile = () => {
         )}
       </div>
     </motion.div>
+    </div>
   );
 };
 

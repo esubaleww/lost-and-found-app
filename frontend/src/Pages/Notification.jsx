@@ -15,10 +15,10 @@ const Notifications = () => {
     if (!user?.id || !token) return;
 
     Promise.all([
-      fetch(`http://localhost:5000/api/notifications`, {
+      fetch(`https://server-production-82bb.up.railway.app/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       }).then(res => res.json()),
-      fetch(`http://localhost:5000/api/notifications/count`, {
+      fetch(`https://server-production-82bb.up.railway.app/api/notifications/count`, {
         headers: { Authorization: `Bearer ${token}` },
       }).then(res => res.json())
     ])
@@ -48,7 +48,7 @@ const Notifications = () => {
   }, [user?.id, token, autoMarkRead]);
 
   const handleMarkAsRead = (id, updateCount = true) => {
-    fetch(`http://localhost:5000/api/notifications/read/${id}`, {
+    fetch(`https://server-production-82bb.up.railway.app/api/notifications/read/${id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -80,7 +80,8 @@ const Notifications = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-slate-400">
+    <div className="bg-gradient-to-r from-violet-300 to-green-200  min-h-screen">
+    <div className="max-w-3xl mx-auto p-6 bg-slate-400 rounded-xl">
       <ToastContainer position="top-right" autoClose={5000} />
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-white">
@@ -144,6 +145,7 @@ const Notifications = () => {
           );
         })
       )}
+    </div>
     </div>
   );
 };

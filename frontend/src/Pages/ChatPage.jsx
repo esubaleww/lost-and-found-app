@@ -33,7 +33,7 @@ useEffect(() => {
     if (!token || !claimId) return;
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/messages/${claimId}`, {
+        const res = await fetch(`https://server-production-82bb.up.railway.app/api/messages/${claimId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -139,7 +139,7 @@ const handleTyping = (e) => {
   setSending(true);
 
   try {
-    const res = await fetch('http://localhost:5000/api/messages', {
+    const res = await fetch('https://server-production-82bb.up.railway.app/api/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ const handleTyping = (e) => {
 
   const handleDeleteMessage = async (messageId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/${messageId}`, {
+      const res = await fetch(`https://server-production-82bb.up.railway.app/api/messages/${messageId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -227,7 +227,7 @@ function formatTime(timestamp) {
 
                 <div className="relative">
                   <img
-                    src={`http://localhost:5000/uploads/${msg.profile_picture || 'default.jpg'}`}
+                    src={`https://server-production-82bb.up.railway.app/uploads/${msg.profile_picture || 'default.jpg'}`}
                     alt="Profile"
                     className="w-9 h-9 rounded-full object-cover border shadow"
                   />
